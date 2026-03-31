@@ -314,7 +314,7 @@ function gerarRelatorio(p, layer) {
 
         });
 
-    }, 800); // tempo pra garantir renderização
+    }, 1500); // tempo pra garantir renderização
 }
         
 
@@ -433,14 +433,11 @@ var areaStr = formatarArea(area);
         // ========== BASEMAP GOOGLE HYBRID ==========
         map.createPane('pane_GoogleHybrid_0');
         map.getPane('pane_GoogleHybrid_0').style.zIndex = 400;
-        var layer_GoogleHybrid_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-            pane: 'pane_GoogleHybrid_0',
-            opacity: 1.0,
-            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
-            minZoom: 1, maxZoom: 28, minNativeZoom: 0, maxNativeZoom: 20
-        });
-        map.addLayer(layer_GoogleHybrid_0);
-
+        var layer_GoogleHybrid_0 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: OSM_ATTR,
+    maxZoom: 19
+});
+            
         // ========== CAMADA 1: Região Metropolitana ==========
         function pop_RegioMetropolitana_1(feature, layer) {
             layer.on({
