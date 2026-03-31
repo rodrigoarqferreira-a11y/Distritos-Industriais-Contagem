@@ -174,9 +174,13 @@ function getCorZoneamento(z) {
 
     z = z.toUpperCase();
 
-    if (z.includes("INDUSTRIAL")) return "#d73027";
-    if (z.includes("COMERCIAL")) return "#4575b4";
-    if (z.includes("RESIDENCIAL")) return "#1a9850";
+    if (z.includes("ZAE1 - ZONA DE ATIVIDADE ECONÔMICA 1")) return "#9216c7";
+    if (z.includes("ZAE2 - ZONA DE ATIVIDADE ECONÔMICA 2")) return "#deb3f2";
+    if (z.includes("ZEIS1 - ZONA DE ESPECIAL INTERESSE SOCIAL 1")) return "#a7c636";
+    if (z.includes("ZUD3 - ZONA DE USOS DIVERSIFICADOS 3")) return "#6e0519";
+    if (z.includes("ZPA1 - ZONA DE PROTEÇÃO AMBIENTAL 1")) return "#1bbf23";
+    if (z.includes("ZUD4 - ZONA DE USOS DIVERSIFICADOS 4")) return "#db0b1c";
+    if (z.includes("ZEIS2 - ZONA DE ESPECIAL INTERESSE SOCIAL 2")) return "#f5e400";
 
     return "#888";
 }
@@ -185,7 +189,7 @@ var center = bounds.getCenter();
 
 var arcgisUrl = "https://www.arcgis.com/apps/mapviewer/index.html?webmap=54e46ff04b914c14aaa280b3bf83a03b"
 + "&center=" + center.lng + "," + center.lat
-+ "&scale=2000";
++ "&scale=1000";
 var html = `
 <html>
 <head>
