@@ -328,10 +328,10 @@ map.addLayer(layer_ArcGIS_0);
                 mouseover: highlightFeature,
             });
             var popupContent = '<table>'
-                + '<tr><td colspan="2">' + (feature.properties['CD_MUN']   !== null ? autolinker.link(String(feature.properties['CD_MUN']))   : '') + '</td></tr>'
-                + '<tr><td colspan="2">' + (feature.properties['NM_MUN']   !== null ? autolinker.link(String(feature.properties['NM_MUN']))   : '') + '</td></tr>'
-                + '<tr><td colspan="2">' + (feature.properties['SIGLA_UF'] !== null ? autolinker.link(String(feature.properties['SIGLA_UF'])) : '') + '</td></tr>'
-                + '<tr><td colspan="2">' + (feature.properties['AREA_KM2'] !== null ? autolinker.link(String(feature.properties['AREA_KM2'])) : '') + '</td></tr>'
+                + '<tr><td colspan="2">' + (feature.properties['CD_MUN']   !== null ? String(feature.properties['CD_MUN'])   : '') + '</td></tr>'
+                + '<tr><td colspan="2">' + (feature.properties['NM_MUN']   !== null ? String(feature.properties['NM_MUN'])   : '') + '</td></tr>'
+                + '<tr><td colspan="2">' + (feature.properties['SIGLA_UF'] !== null ? String(feature.properties['SIGLA_UF']) : '') + '</td></tr>'
+                + '<tr><td colspan="2">' + (feature.properties['AREA_KM2'] !== null ? String(feature.properties['AREA_KM2']) : '') + '</td></tr>'
                 + '</table>';
             var content = popupContent;
             
@@ -355,7 +355,7 @@ map.addLayer(layer_ArcGIS_0);
          // ========== CAMADAS 6–12: Limites e Município ==========
         function pop_LimiteDistritoRiachodasPedrasconformeaPlantadeParcelamentodoSolo_6(feature, layer) {
             layer.on({ mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') e.target._eventParents[i].resetStyle(e.target); } }, mouseover: highlightFeature });
-            var c = '<table><tr><td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(String(feature.properties['id'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['nome'] !== null ? autolinker.link(String(feature.properties['nome'])) : '') + '</td></tr></table>';
+            var c = '<table><tr><td colspan="2">' + (feature.properties['id'] !== null ? String(feature.properties['id']) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['nome'] !== null ? String(feature.properties['nome']) : '') + '</td></tr></table>';
             layer.bindPopup(c, { maxHeight: 400 });
         }
         function style_LimiteDistritoRiachodasPedrasconformeaPlantadeParcelamentodoSolo_6_0() {
@@ -371,7 +371,7 @@ map.addLayer(layer_ArcGIS_0);
         function pop_LimiteDistritoCINCOconformeaPlantadeParcelamentodoSoloAprovadaem121993_7(feature, layer) {
             layer.on({ mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') e.target._eventParents[i].resetStyle(e.target); } }, mouseover: highlightFeature });
             var props = ['id','REGIONAL','GESTÃO','FUNDACÃO','DISTRITO','Nome_bacia','ZONA_SIGLA','Nome_zonea','Nome_abrev'];
-            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? autolinker.link(String(feature.properties[k])) : '') + '</td></tr>'; }).join('') + '</table>';
+            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? String(feature.properties[k]) : '') + '</td></tr>'; }).join('') + '</table>';
             layer.bindPopup(c, { maxHeight: 400 });
         }
         function style_LimiteDistritoCINCOconformeaPlantadeParcelamentodoSoloAprovadaem121993_7_0() {
@@ -401,7 +401,7 @@ map.addLayer(layer_ArcGIS_0);
         function pop_LimiteDistritoCINQUINHOconformeaPlantadeParcelamentodoSoloAprovadaem20091990_9(feature, layer) {
             layer.on({ mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') e.target._eventParents[i].resetStyle(e.target); } }, mouseover: highlightFeature });
             var props = ['INSCRICAO','BAIRRO','QUADRA_OFI','LOTE_OFICI','APROVADO','OBSERVACAO','CP','AREA','MATR','DECRETO','REGIAO_ADM'];
-            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? autolinker.link(String(feature.properties[k])) : '') + '</td></tr>'; }).join('') + '</table>';
+            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? String(feature.properties[k]) : '') + '</td></tr>'; }).join('') + '</table>';
             layer.bindPopup(c, { maxHeight: 400 });
         }
         function style_LimiteDistritoCINQUINHOconformeaPlantadeParcelamentodoSoloAprovadaem20091990_9_0() {
@@ -417,7 +417,7 @@ map.addLayer(layer_ArcGIS_0);
         function pop_LimiteDistritoCincoconformeaPlantadeParcelamentodoSoloAprovadaem28101976_10(feature, layer) {
             layer.on({ mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') e.target._eventParents[i].resetStyle(e.target); } }, mouseover: highlightFeature });
             var props = ['id','REGIONAL','GESTÃO','FUNDACÃO','DISTRITO','Nome_bacia','Nome_zonea','AREA','PERÍMETRO'];
-            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? autolinker.link(String(feature.properties[k])) : '') + '</td></tr>'; }).join('') + '</table>';
+            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? String(feature.properties[k]) : '') + '</td></tr>'; }).join('') + '</table>';
             layer.bindPopup(c, { maxHeight: 400 });
         }
         function style_LimiteDistritoCincoconformeaPlantadeParcelamentodoSoloAprovadaem28101976_10_0() {
@@ -433,7 +433,7 @@ map.addLayer(layer_ArcGIS_0);
         function pop_LimiteDistritoCidadeIndustrialconformeaPlantadeParcelamentodoSoloAprovadaem03091974_11(feature, layer) {
             layer.on({ mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') e.target._eventParents[i].resetStyle(e.target); } }, mouseover: highlightFeature });
             var props = ['id','REGIONAL','GESTÃO','FUNDACÃO','DISTRITO','Nome_bacia','Nome_zonea','ZONA_SIGLA','AREA','PERÍMETRO'];
-            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? autolinker.link(String(feature.properties[k])) : '') + '</td></tr>'; }).join('') + '</table>';
+            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? String(feature.properties[k]) : '') + '</td></tr>'; }).join('') + '</table>';
             layer.bindPopup(c, { maxHeight: 400 });
         }
         function style_LimiteDistritoCidadeIndustrialconformeaPlantadeParcelamentodoSoloAprovadaem03091974_11_0() {
@@ -449,7 +449,7 @@ map.addLayer(layer_ArcGIS_0);
         function pop_LimiteMunicipaldeContagemConformeaLeiComplementar362de28deSetembrode2023_12(feature, layer) {
             layer.on({ mouseout: function(e) { for (var i in e.target._eventParents) { if (typeof e.target._eventParents[i].resetStyle === 'function') e.target._eventParents[i].resetStyle(e.target); } }, mouseover: highlightFeature });
             var props = ['Nome_muni','SIGM_Conta','Perimetro','created_us','created_da','last_edite','last_edi_1'];
-            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? autolinker.link(String(feature.properties[k])) : '') + '</td></tr>'; }).join('') + '</table>';
+            var c = '<table>' + props.map(function(k){ return '<tr><td colspan="2">' + (feature.properties[k] !== null ? String(feature.properties[k]) : '') + '</td></tr>'; }).join('') + '</table>';
             layer.bindPopup(c, { maxHeight: 400 });
         }
         function style_LimiteMunicipaldeContagemConformeaLeiComplementar362de28deSetembrode2023_12_0() {
