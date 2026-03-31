@@ -149,288 +149,172 @@
         // ========== RELATÓRIO SIMPLES ==========
 function gerarRelatorio(p, layer) {
 
-var hoje = new Date().toLocaleDateString('pt-BR');
-
-var logo = "https://portal.contagem.mg.gov.br/img/logo_mobile.svg?1759316296";
-
-function val(v){
-return (v !== null && v !== undefined && v !== '') ? v : '—';
-}
-
-function formatarArea(valor) {
-    if (valor === null || valor === undefined || valor === '') return '—';
-
-    var num = Number(valor);
-
-    if (isNaN(num)) return valor;
-
-    return num.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }) + ' m²';
-}
-function getCorZoneamento(z) {
-    if (!z) return "#999";
-
-    z = z.toUpperCase();
-
-    if (z.includes("ZAE1 - ZONA DE ATIVIDADE ECONÔMICA 1")) return "#9216c7";
-    if (z.includes("ZAE2 - ZONA DE ATIVIDADE ECONÔMICA 2")) return "#deb3f2";
-    if (z.includes("ZEIS1 - ZONA DE ESPECIAL INTERESSE SOCIAL 1")) return "#a7c636";
-    if (z.includes("ZUD3 - ZONA DE USOS DIVERSIFICADOS 3")) return "#6e0519";
-    if (z.includes("ZPA1 - ZONA DE PROTEÇÃO AMBIENTAL 1")) return "#1bbf23";
-    if (z.includes("ZUD4 - ZONA DE USOS DIVERSIFICADOS 4")) return "#db0b1c";
-    if (z.includes("ZEIS2 - ZONA DE ESPECIAL INTERESSE SOCIAL 2")) return "#f5e400";
-
-    return "#888";
-}
-var bounds = layer.getBounds();
-var center = bounds.getCenter();
-
-var arcgisUrl = "https://www.arcgis.com/apps/mapviewer/index.html?webmap=54e46ff04b914c14aaa280b3bf83a03b"
-+ "&center=" + center.lng + "," + center.lat
-+ "&scale=1000";
-var html = `
-<html>
-<head>
-<title>Relatório do Lote</title>
-
-<script type="module" src="https://js.arcgis.com/5.0/embeddable-components/"></script>
-
-<style>
-
-body{
-font-family:Arial;
-margin:0;
-color:#333;
-}
-
-.barra{
-height:55px;
-width:100%;
-background: linear-gradient(
-90deg,
-#082a4d 0%,
-#0b3d6d 50%,
-#1f74c9 100%
-);
-}
-
-.container{
-padding:50px;
-max-width:900px;
-margin:auto;
-}
-
-.header{
-display:flex;
-align-items:center;
-margin-bottom:35px;
-}
-
-.logo{
-height:120px;
-margin-right:25px;
-}
-
-.titulo{
-font-size:20px;
-font-weight:bold;
-color:#1a3a5c;
-}
-
-.subtitulo{
-font-size:14px;
-color:#555;
-line-height:1.4;
-}
-
-h2{
-margin-top:20px;
-color:#1a3a5c;
-}
-
-table{
-border-collapse:collapse;
-width:100%;
-margin-top:10px;
-}
+    var hoje = new Date().toLocaleDateString('pt-BR');
+
+    function val(v){
+        return (v !== null && v !== undefined && v !== '') ? v : '—';
+    }
+
+    function formatarArea(valor) {
+        if (!valor) return '—';
+        var num = Number(valor);
+        if (isNaN(num)) return valor;
+        return num.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + ' m²';
+    }
+
+    // 🔴 PASSO IMPORTANTE: ZOOM NO LOTE ANTES DA CAPTURA
+    map.fitBounds(layer.getBounds(), {padding: [40,40]});
+
+    // Aguarda o mapa renderizar
+    setTimeout(function(){
+
+        // 🔴 CAPTURA IMAGEM DO MAPA (LEAFLET)
+        leafletImage(map, function(err, canvas) {
+
+            var imgMapa = canvas.toDataURL("image/png");
+
+            // 🔴 HTML DO RELATÓRIO
+            var html = `
+            <html>
+            <head>
+            <title>Relatório do Lote</title>
+
+            <style>
+            body{
+                font-family: Arial;
+                margin:0;
+                color:#333;
+            }
+
+            .barra{
+                height:55px;
+                width:100%;
+                background: linear-gradient(90deg,#082a4d,#1f74c9);
+            }
+
+            .container{
+                padding:40px;
+                max-width:900px;
+                margin:auto;
+            }
+
+            .titulo{
+                font-size:22px;
+                font-weight:bold;
+                color:#1a3a5c;
+            }
+
+            h2{
+                margin-top:25px;
+                color:#1a3a5c;
+            }
+
+            table{
+                border-collapse:collapse;
+                width:100%;
+                margin-top:10px;
+            }
+
+            td{
+                border:1px solid #ddd;
+                padding:10px;
+                font-size:13px;
+            }
+
+            td:first-child{
+                background:#f5f5f5;
+                font-weight:bold;
+                width:35%;
+            }
+
+            .mapa{
+                margin-top:15px;
+                border:1px solid #ccc;
+            }
+
+            .botaoPDF{
+                margin-top:25px;
+                background:#0b3d6d;
+                color:white;
+                border:none;
+                padding:14px;
+                font-size:15px;
+                cursor:pointer;
+                border-radius:6px;
+                width:100%;
+            }
+
+            .botaoPDF:hover{
+                background:#072b4d;
+            }
 
-td{
-border:1px solid #ddd;
-padding:10px;
-font-size:13px;
-}
+            .footer{
+                margin-top:40px;
+                font-size:12px;
+                color:#666;
+                border-top:1px solid #ddd;
+                padding-top:10px;
+            }
 
-td:first-child{
-background:#f5f5f5;
-font-weight:bold;
-width:35%;
-}
+            @media print {
+                .botaoPDF { display:none; }
+            }
 
-.botaoPDF{
-margin-top:25px;
-background:#0b3d6d;
-color:white;
-border:none;
-padding:12px 20px;
-font-size:14px;
-cursor:pointer;
-border-radius:4px;
-}
-
-.botaoPDF:hover{
-background:#072b4d;
-}
-
-.footer{
-margin-top:50px;
-font-size:13px;
-color:#666;
-line-height:1.6;
-border-top:1px solid #ddd;
-padding-top:15px;
-}
+            </style>
+            </head>
 
-</style>
+            <body>
 
-</head>
-
-<body>
-
-<div class="barra"></div>
-
-<div class="container">
-
-<div class="header">
-
-<img class="logo" src="${logo}">
-
-<div>
-
-<div class="titulo">Prefeitura de Contagem</div>
-
-<div class="subtitulo">
-Secretaria de Desenvolvimento Econômico – SEDECON
-</div>
-
-<div class="subtitulo">
-Superintendencia de Gestão de Distritos e Polos
-</div>
-
-<div class="subtitulo">
-Superintendência de Inovação e Informações Estratégicas
-</div>
+            <div class="barra"></div>
 
-</div>
+            <div class="container">
 
-</div>
+            <div class="titulo">
+            Prefeitura de Contagem – Relatório do Lote
+            </div>
 
-<h2>Sistema de Consulta de Lotes dos Distritos Industriais de Contagem</h2>
+            <p>Emitido em ${hoje}</p>
 
-<h2>Relatório do Lote</h2>
+            <table>
 
-<p>Emitido em ${hoje}</p>
+            <tr><td>Distrito</td><td>${val(p['distrito'])}</td></tr>
+            <tr><td>Quadra</td><td>${val(p['quadra'])}</td></tr>
+            <tr><td>Lote</td><td>${val(p['lote'])}</td></tr>
+            <tr><td>Área</td><td>${formatarArea(p['area'])}</td></tr>
+            <tr><td>Proprietário</td><td>${val(p['proprietar'])}</td></tr>
+            <tr><td>Ocupante</td><td>${val(p['ocupante'])}</td></tr>
+            <tr><td>Observação</td><td>${val(p['observac_1'])}</td></tr>
 
-<table>
+            </table>
 
-<tr>
-<td>Distrito</td>
-<td>${val(p['distrito'] || p['Distrito'])}</td>
-</tr>
+            <h2>Localização do Lote</h2>
 
-<tr>
-<td>Quadra</td>
-<td>${val(p['quadra'] || p['quadra-of'])}</td>
-</tr>
+            <img class="mapa" src="${imgMapa}" width="100%" />
 
-<tr>
-<td>Lote</td>
-<td>${val(p['lote'] || p['lote-of'])}</td>
-</tr>
+            <button class="botaoPDF" onclick="window.print()">
+            📄 Baixar / Imprimir PDF
+            </button>
 
-<tr>
-<td>Área</td>
-<td>${formatarArea(p['area'])}</td>
-</tr>
+            <div class="footer">
+            Este documento é informativo e deve ser validado junto aos órgãos competentes.
+            </div>
 
-<tr>
-<td>Proprietário</td>
-<td>${val(p['proprietar'] || p['Proprietar'])}</td>
-</tr>
+            </div>
 
-<tr>
-<td>Ocupante</td>
-<td>${val(p['ocupante'])}</td>
-</tr>
+            </body>
+            </html>
+            `;
 
-<tr>
-<td>Observação</td>
-<td>${val(p['observac_1'] || p['observa'])}</td>
-</tr>
+            var w = window.open("");
+            w.document.write(html);
+            w.document.close();
 
-<tr>
-<td>Zoneamento</td>
-<td>
-    <span style="
-        display:inline-block;
-        padding:4px 10px;
-        border-radius:4px;
-        color:white;
-        font-weight:bold;
-        background:${getCorZoneamento(p['zoneamento'])};
-    ">
-        ${val(p['zoneamento'])}
-    </span>
-</td>
-</tr>
+        });
 
-</table>
-
-<h2>Localização do Lote</h2>
-
-<script type="module" src="https://js.arcgis.com/5.0/embeddable-components/"></script>
-
-<arcgis-embedded-map
-  style="width:100%; height:400px;"
-  item-id="54e46ff04b914c14aaa280b3bf83a03b"
-  center="${center.lng},${center.lat}"
-  scale="2000"
-  theme="light"
-  view-mode="view"
-  hide-ui
-  portal-url="https://www.arcgis.com">
-</arcgis-embedded-map>
-
-<button class="botaoPDF" onclick="window.print()">
-Baixar / Imprimir PDF
-</button>
-
-<div style="margin-top:40px; padding:15px; border:1px solid #ddd; background:#fafafa; border-left:5px solid #c94e00; font-size:13px; line-height:1.5;">
-    <strong>OBSERVAÇÕES GERAIS</strong>
-
-    <p>1) O DOCUMENTO NÃO DEVE SER USADO COMO ÚNICA FONTE NA OBSERVÂNCIA DE PARÂMETROS.</p>
-    <p>2) AS INFORMAÇÕES DEVEM SER VALIDADAS JUNTO AOS ÓRGÃOS COMPETENTES.</p>
-</div>
-
-<div class="footer">
-
-<strong>Secretaria de Desenvolvimento Econômico – SEDECON</strong><br>
-Rua Haeckel Ben-Hur Salvador, 180 – Cinco<br>
-Contagem – MG
-
-</div>
-
-</div>
-
-</body>
-</html>
-`;
-
-var w = window.open("");
-w.document.write(html);
-w.document.close();
-
+    }, 800); // tempo pra garantir renderização
 }
         
 
