@@ -141,8 +141,7 @@
         <script src="data/LimiteDistritoCincoconformeaPlantadeParcelamentodoSoloAprovadaem28101976_10.js"></script>
         <script src="data/LimiteDistritoCidadeIndustrialconformeaPlantadeParcelamentodoSoloAprovadaem03091974_11.js"></script>
         <script src="data/LimiteMunicipaldeContagemConformeaLeiComplementar362de28deSetembrode2023_12.js"></script>
-        <script type="module" src="https://js.arcgis.com/5.0/embeddable-components/"></script>
-
+        
         <script>
         // ========== CONFIGURAÇÕES ==========
         var OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
@@ -398,7 +397,8 @@ Superintendência de Inovação e Informações Estratégicas
   center="${center.lng},${center.lat}"
   scale="2000"
   theme="light"
-  navigation-disabled
+  view-mode="view"
+  hide-ui
   portal-url="https://www.arcgis.com">
 </arcgis-embedded-map>
 
