@@ -169,7 +169,11 @@ function gerarRelatorio(p, layer) {
     map.fitBounds(layer.getBounds(), {padding: [40,40]});
 
     // Aguarda o mapa renderizar
-    setTimeout(function(){
+    map.once("moveend", function () {
+
+    setTimeout(function () {
+
+        leafletImage(map, function(err, canvas) {
 
         // 🔴 CAPTURA IMAGEM DO MAPA (LEAFLET)
         leafletImage(map, function(err, canvas) {
@@ -312,10 +316,11 @@ function gerarRelatorio(p, layer) {
             w.document.write(html);
             w.document.close();
 
-        });
+                });
 
-    }, 1500); // tempo pra garantir renderização
-}
+    }, 800);
+
+});
         
 
         // ========== FUNÇÃO GLOBAL: MONTAR POPUP DOS LOTES ==========
@@ -389,11 +394,12 @@ var areaStr = formatarArea(area);
 
         // ========== MAPA ==========
         var map = L.map('map', {
-            center: [-19.9317, -44.0536],
-            zoom: 13,
-            scrollWheelZoom: true,
-            zoomControl: true
-        });
+    center: [-19.9317, -44.0536],
+    zoom: 18,          // 🔴 já inicia bem próximo
+    maxZoom: 23,       // 🔴 permite zoom nível 1000
+    zoomControl: true,
+    scrollWheelZoom: true
+});
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -430,13 +436,21 @@ var areaStr = formatarArea(area);
         var bounds_group = new L.featureGroup([]);
         function setBounds() {}
 
-        // ========== BASEMAP GOOGLE HYBRID ==========
-        map.createPane('pane_GoogleHybrid_0');
-        map.getPane('pane_GoogleHybrid_0').style.zIndex = 400;
-        var layer_GoogleHybrid_0 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: OSM_ATTR,
-    maxZoom: 19
-});
+        
+        // ========== BASEMAP ARCGIS IMAGERY ==========
+map.createPane('pane_ArcGIS_0');
+map.getPane('pane_ArcGIS_0').style.zIndex = 400;
+
+var layer_ArcGIS_0 = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution: 'Tiles © Esri',
+    maxZoom: 23, // 🔴 permite zoom MUITO alto (escala ~1000)
+    maxNativeZoom: 19 // 🔴 evita quebra de resolução
+  }
+);
+
+map.addLayer(layer_ArcGIS_0);
             
         // ========== CAMADA 1: Região Metropolitana ==========
         function pop_RegioMetropolitana_1(feature, layer) {
