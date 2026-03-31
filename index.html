@@ -147,7 +147,7 @@
         var OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
         // ========== RELATÓRIO SIMPLES ==========
-function gerarRelatorio(p) {
+function gerarRelatorio(p, layer) {
 
 var hoje = new Date().toLocaleDateString('pt-BR');
 
@@ -180,17 +180,13 @@ function getCorZoneamento(z) {
 
     return "#888";
 }
-
-var html = `
-
 var bounds = layer.getBounds();
 var center = bounds.getCenter();
 
-var arcgisUrl = `
-https://www.arcgis.com/apps/mapviewer/index.html?webmap=54e46ff04b914c14aaa280b3bf83a03b
-&center=${center.lng},${center.lat}
-&scale=2000
-`;
+var arcgisUrl = "https://www.arcgis.com/apps/mapviewer/index.html?webmap=54e46ff04b914c14aaa280b3bf83a03b"
++ "&center=" + center.lng + "," + center.lat
++ "&scale=2000";
+var html = `
 <html>
 <head>
 <title>Relatório do Lote</title>
