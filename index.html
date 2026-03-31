@@ -123,12 +123,8 @@
     <div id="relatorio-print"></div>
 
 <script src="js/leaflet.js"></script>
-<script src="js/leaflet.rotatedMarker.js"></script>
 <script src="js/leaflet-hash.js"></script>
 <script src="js/qgis2web_expressions.js"></script>
-<script src="js/leaflet.pattern.js"></script>
-<script src="js/Autolinker.min.js"></script>
-
       <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
         <script src="data/RegioMetropolitana_1.js"></script>
         <script src="data/LimiteDistritoRiachodasPedrasconformeaPlantadeParcelamentodoSolo_6.js"></script>
@@ -296,43 +292,15 @@ var areaStr = formatarArea(area);
         // ========== MAPA ==========
         var map = L.map('map', {
     center: [-19.9317, -44.0536],
-    zoom: 18,          // 🔴 já inicia bem próximo
-    maxZoom: 23,       // 🔴 permite zoom nível 1000
+    zoom: 13,          // 🔴 já inicia bem próximo
+    maxZoom: 21,       // 🔴 permite zoom nível 1000
     zoomControl: true,
     scrollWheelZoom: true
 });
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
-        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-
-        function removeEmptyRowsFromPopupContent(content, feature) {
-            var tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            var rows = tempDiv.querySelectorAll('tr');
-            for (var i = 0; i < rows.length; i++) {
-                var td = rows[i].querySelector('td.visible-with-data');
-                var key = td ? td.id : '';
-                if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
-                    rows[i].parentNode.removeChild(rows[i]);
-                }
-            }
-            return tempDiv.innerHTML;
-        }
-        function addClassToPopupIfMedia(content, popup) {
-            var tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            var imgTd = tempDiv.querySelector('td img');
-            if (imgTd) {
-                var src = imgTd.getAttribute('src');
-                if (/\.(jpg|jpeg|png|gif|bmp|webp|avif)$/i.test(src)) {
-                    popup._contentNode.classList.add('media');
-                    setTimeout(function() { popup.update(); }, 10);
-                }
-            } else {
-                popup._contentNode.classList.remove('media');
-            }
-        }
-
+        
+        
         var zoomControl = L.control.zoom({ position: 'topleft' }).addTo(map);
         var bounds_group = new L.featureGroup([]);
         function setBounds() {}
@@ -365,8 +333,8 @@ map.addLayer(layer_ArcGIS_0);
                 + '<tr><td colspan="2">' + (feature.properties['SIGLA_UF'] !== null ? autolinker.link(String(feature.properties['SIGLA_UF'])) : '') + '</td></tr>'
                 + '<tr><td colspan="2">' + (feature.properties['AREA_KM2'] !== null ? autolinker.link(String(feature.properties['AREA_KM2'])) : '') + '</td></tr>'
                 + '</table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-            layer.on('popupopen', function(e) { addClassToPopupIfMedia(content, e.popup); });
+            var content = popupContent;
+            
             layer.bindPopup(content, { maxHeight: 400 });
         }
         function style_RegioMetropolitana_1_0() {
@@ -556,22 +524,7 @@ fetch("data/lotes_distritos_mapa.geojson")
   .catch(function(err) {
     console.error("❌ Erro ao carregar GeoJSON:", err);
     alert("Erro ao carregar os lotes. Verifique o arquivo GeoJSON.");
-  });
-
-            var labelLayers = [
-            layer_RegioMetropolitana_1,
-            layer_LimiteDistritoRiachodasPedrasconformeaPlantadeParcelamentodoSolo_6,
-            layer_LimiteDistritoCINCOconformeaPlantadeParcelamentodoSoloAprovadaem121993_7,
-            layer_LimiteDistritoDrHlioPentagnaconformeaPlantadeParcelamentodoSoloLotesIndustriaisAprovadaemagostode2000_8,
-            layer_LimiteDistritoCINQUINHOconformeaPlantadeParcelamentodoSoloAprovadaem20091990_9,
-            layer_LimiteDistritoCincoconformeaPlantadeParcelamentodoSoloAprovadaem28101976_10,
-            layer_LimiteDistritoCidadeIndustrialconformeaPlantadeParcelamentodoSoloAprovadaem03091974_11,
-            layer_LimiteMunicipaldeContagemConformeaLeiComplementar362de28deSetembrode2023_12
-        ];
-        resetLabels(labelLayers);
-        map.on("zoomend",     function(){ resetLabels(labelLayers); });
-        map.on("layeradd",    function(){ resetLabels(labelLayers); });
-        map.on("layerremove", function(){ resetLabels(labelLayers); });
+  });            
         </script>
     </body>
 </html>
