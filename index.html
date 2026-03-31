@@ -168,146 +168,29 @@ function gerarRelatorio(p, layer) {
     // 🔴 PASSO IMPORTANTE: ZOOM NO LOTE ANTES DA CAPTURA
     map.fitBounds(layer.getBounds(), {padding: [40,40]});
 
-    // Aguarda o mapa renderizar
-    map.once("moveend", function () {
+map.once("moveend", function () {
 
     setTimeout(function () {
 
         leafletImage(map, function(err, canvas) {
 
-        // 🔴 CAPTURA IMAGEM DO MAPA (LEAFLET)
-        leafletImage(map, function(err, canvas) {
+            if (err) {
+                alert("Erro ao capturar o mapa");
+                console.error(err);
+                return;
+            }
 
             var imgMapa = canvas.toDataURL("image/png");
 
-            // 🔴 HTML DO RELATÓRIO
             var html = `
             <html>
             <head>
             <title>Relatório do Lote</title>
-
-            <style>
-            body{
-                font-family: Arial;
-                margin:0;
-                color:#333;
-            }
-
-            .barra{
-                height:55px;
-                width:100%;
-                background: linear-gradient(90deg,#082a4d,#1f74c9);
-            }
-
-            .container{
-                padding:40px;
-                max-width:900px;
-                margin:auto;
-            }
-
-            .titulo{
-                font-size:22px;
-                font-weight:bold;
-                color:#1a3a5c;
-            }
-
-            h2{
-                margin-top:25px;
-                color:#1a3a5c;
-            }
-
-            table{
-                border-collapse:collapse;
-                width:100%;
-                margin-top:10px;
-            }
-
-            td{
-                border:1px solid #ddd;
-                padding:10px;
-                font-size:13px;
-            }
-
-            td:first-child{
-                background:#f5f5f5;
-                font-weight:bold;
-                width:35%;
-            }
-
-            .mapa{
-                margin-top:15px;
-                border:1px solid #ccc;
-            }
-
-            .botaoPDF{
-                margin-top:25px;
-                background:#0b3d6d;
-                color:white;
-                border:none;
-                padding:14px;
-                font-size:15px;
-                cursor:pointer;
-                border-radius:6px;
-                width:100%;
-            }
-
-            .botaoPDF:hover{
-                background:#072b4d;
-            }
-
-            .footer{
-                margin-top:40px;
-                font-size:12px;
-                color:#666;
-                border-top:1px solid #ddd;
-                padding-top:10px;
-            }
-
-            @media print {
-                .botaoPDF { display:none; }
-            }
-
-            </style>
             </head>
-
             <body>
-
-            <div class="barra"></div>
-
-            <div class="container">
-
-            <div class="titulo">
-            Prefeitura de Contagem – Relatório do Lote
-            </div>
-
-            <p>Emitido em ${hoje}</p>
-
-            <table>
-
-            <tr><td>Distrito</td><td>${val(p['distrito'])}</td></tr>
-            <tr><td>Quadra</td><td>${val(p['quadra'])}</td></tr>
-            <tr><td>Lote</td><td>${val(p['lote'])}</td></tr>
-            <tr><td>Área</td><td>${formatarArea(p['area'])}</td></tr>
-            <tr><td>Proprietário</td><td>${val(p['proprietar'])}</td></tr>
-            <tr><td>Ocupante</td><td>${val(p['ocupante'])}</td></tr>
-            <tr><td>Observação</td><td>${val(p['observac_1'])}</td></tr>
-
-            </table>
-
-            <h2>Localização do Lote</h2>
-
-            <img class="mapa" src="${imgMapa}" width="100%" />
-
-            <button class="botaoPDF" onclick="window.print()">
-            📄 Baixar / Imprimir PDF
-            </button>
-
-            <div class="footer">
-            Este documento é informativo e deve ser validado junto aos órgãos competentes.
-            </div>
-
-            </div>
-
+            <h2>Relatório</h2>
+            <img src="${imgMapa}" width="100%" />
+            <button onclick="window.print()">Imprimir</button>
             </body>
             </html>
             `;
@@ -316,11 +199,13 @@ function gerarRelatorio(p, layer) {
             w.document.write(html);
             w.document.close();
 
-                });
+        });
 
     }, 800);
 
 });
+
+            
         
 
         // ========== FUNÇÃO GLOBAL: MONTAR POPUP DOS LOTES ==========
