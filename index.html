@@ -169,6 +169,17 @@ function formatarArea(valor) {
         maximumFractionDigits: 2
     }) + ' m²';
 }
+function getCorZoneamento(z) {
+    if (!z) return "#999";
+
+    z = z.toUpperCase();
+
+    if (z.includes("INDUSTRIAL")) return "#d73027";
+    if (z.includes("COMERCIAL")) return "#4575b4";
+    if (z.includes("RESIDENCIAL")) return "#1a9850";
+
+    return "#888";
+}
 
 var html = `
 <html>
@@ -345,6 +356,22 @@ Superintendência de Inovação e Informações Estratégicas
 <tr>
 <td>Observação</td>
 <td>${val(p['observac_1'] || p['observa'])}</td>
+</tr>
+
+<tr>
+<td>Zoneamento</td>
+<td>
+    <span style="
+        display:inline-block;
+        padding:4px 10px;
+        border-radius:4px;
+        color:white;
+        font-weight:bold;
+        background:${getCorZoneamento(p['zoneamento'])};
+    ">
+        ${val(p['zoneamento'])}
+    </span>
+</td>
 </tr>
 
 </table>
